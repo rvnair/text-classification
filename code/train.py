@@ -29,7 +29,7 @@ def train(epoch, device):
         loss.backward()
         optimizer.step()
         
-        if args.interval > 0 and i % args.interval == 0:
+        if args.interval > 0 and i % args.interval == 0 and not args.silent:
             print('Epoch: {} | Batch: {}/{} ({:.0f}%) | Loss: {:.6f}'.format(
                 epoch, args.batch_size*i, len(dl_trn.dataset),
                 100.*(args.batch_size*i)/len(dl_trn.dataset),
@@ -51,7 +51,7 @@ def validate_model(device, epoch):
         loss = criterion(output, labels)
         validLoss += loss.item()
         
-        if args.interval > 0 and i % args.interval == 0:
+        if args.interval > 0 and i % args.interval == 0 and not args.silent:
             print('Epoch: {} | Batch: {}/{} ({:.0f}%) | Loss: {:.6f}'.format(
                 epoch, args.batch_size*i, len(dl_val.dataset),
                 100.*(args.batch_size*i)/len(dl_val.dataset),
@@ -75,7 +75,7 @@ def test_model(device):
 	#with torch.no_grad():
         output = mdl(batch)
         outputSet.append(torch.argmax(output, dim=1).detach().cpu().numpy()[0])
-        if args.interval > 0 and i % (args.interval * args.batch_size) == 0:
+        if args.interval > 0 and i % (args.interval * args.batch_size) == 0 and not args.silent:
             print('(Test) Sample: {}/{} ({:.0f}%) '.format(
                 i, len(dl_tst.dataset),
                 100.*(i)/len(dl_tst.dataset)
@@ -93,6 +93,7 @@ if __name__ == "__main__":
     parser.add_argument('--interval', type=int, default=10)
     parser.add_argument('--cuda', type=bool, default=torch.cuda.is_available())
     parser.add_argument('--clip', type=int, default=5)
+    parser.add_argument('--silent', type=bool, default=False)
     args = parser.parse_args()
 
     dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
