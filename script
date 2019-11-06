@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH -J class     # Job name
+#SBATCH -o logs/class%j # Name of stdout output file(%j expands to jobId)
+#SBATCH -e logs/class%j # Name of stderr output file(%j expands to jobId)
+#SBATCH -p gtx          # Submit to the 'normal' or 'development' queue
+#SBATCH -N 1                    # Total number of nodes requested (16 cores/node)
+#SBATCH -n 1                    # Total number of mpi tasks requested
+#SBATCH -t 24:00:00             # Max run time (hh:mm:ss) - 72 hours; this is determined by the queue you submit to, in this case gpu-long; please refer to the user guide for queue info.
+#SBATCH --mail-user=rohan.nair@utexas.edu
+#SBATCH --mail-type=ALL
+# The next line is required if the user has more than one project
+#SBATCH -A compdisc      # Allocation name to charge job against
+
+module reset
+module load python3
+source venv/bin/activate
+python3 code/train.py 
