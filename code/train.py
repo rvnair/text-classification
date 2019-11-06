@@ -37,13 +37,32 @@ def train(epoch, device):
             ))
     trainLoss /= len(dl_trn)
     print('* (Train) Epoch: {} | Loss: {:.4f}'.format(epoch, trainLoss))
-    return trainLoss
+    return validate_model(device, epoch)
 
+def validate_model(device, epoch):
+    mdl.eval()
+    validLoss = 0
+    for i,sampleSet in enumerate(dl_val):
+        batch = sampleSet[0]
+        labels = sampleSet[1]
+        batch, labels = batch.to(device), labels.to(device)
+
+        output = mdl(batch)
+        loss = criterion(output, labels)
+        validLoss += loss.item()
+        
+        if args.interval > 0 and i % args.interval == 0:
+            print('Epoch: {} | Batch: {}/{} ({:.0f}%) | Loss: {:.6f}'.format(
+                epoch, args.batch_size*i, len(dl_val.dataset),
+                100.*(args.batch_size*i)/len(dl_val.dataset),
+                loss.item()
+            ))
+    validLoss /= len(dl_val)
+    print('* (Validation) Epoch: {} | Loss: {:.4f}'.format(epoch, validLoss))
+    return validLoss
+    
 def test_model(device):
     check = torch.load(MODEL_SAV)
-    mdl = model.DAN(n_classes = 2, vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
-        n_hidden_units = args.embedding_dim)
-    mdl = mdl.to(device)
     mdl.load_state_dict(check)
     mdl.eval()
     labelSet = []
@@ -56,6 +75,11 @@ def test_model(device):
 	#with torch.no_grad():
         output = mdl(batch)
         outputSet.append(torch.argmax(output, dim=1).detach().cpu().numpy()[0])
+        if args.interval > 0 and i % (args.interval * args.batch_size) == 0:
+            print('(Test) Sample: {}/{} ({:.0f}%) '.format(
+                i, len(dl_tst.dataset),
+                100.*(i)/len(dl_tst.dataset)
+            ))
     valLoss = accuracy_score(labelSet, outputSet)
     print('* Best Model Validation Accuracy: {}'.format(valLoss))
 
@@ -71,12 +95,15 @@ if __name__ == "__main__":
     parser.add_argument('--clip', type=int, default=5)
     args = parser.parse_args()
 
-    dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None)
-    dl_val, val_vocab, vlenc, vldec = dataset.load(batchSize = 1, seqLen = args.seq_len, path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
-    dl_tst, tst_vocab, tlenc, tdec = dataset.load(batchSize = 1, seqLen = args.seq_len, path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
+    dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
+        path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None)
+    dl_val, val_vocab, vlenc, vldec = dataset.load(batchSize =args.batch_size, seqLen = args.seq_len, \
+        path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
+    dl_tst, tst_vocab, tlenc, tdec = dataset.load(batchSize = 1, seqLen = args.seq_len, \
+        path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    mdl = model.DAN(n_classes = 2, vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+    mdl = model.DAN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
         n_hidden_units = args.embedding_dim, device=device).to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
@@ -89,4 +116,4 @@ if __name__ == "__main__":
             print('* Saved')
             torch.save(mdl.state_dict(), MODEL_SAV)
     
-    # validate(device)
+    test_model(device)
