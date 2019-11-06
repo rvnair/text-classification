@@ -9,7 +9,7 @@ import json
 import time
 
 class DAN(nn.Module):
-    def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300):
+    def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300, device=torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")):
         super().__init__()
         self.n_classes = n_classes
         self.vocab_size = vocab_size
@@ -22,15 +22,7 @@ class DAN(nn.Module):
         )
         self.embeddings = nn.Embedding(self.vocab_size, self.emb_dim)
         self._softmax = nn.Softmax(dim=1)
-        # self.init_weights()
-    
-    def init_weights(self):
-        initrange = 0.5
-        self.embeddings.weight.data.uniform_(-initrange, initrange)
-        self.classifier[0].weight.data.uniform_(-initrange, initrange)
-        self.classifier[0].bias.data.zero_()
-        self.classifier[2].weight.data.uniform_(-initrange, initrange)
-        self.classifier[2].bias.data.zero_()
+        self.device = device
     
     def getLengthSample(self, sample):
         count = 0
@@ -51,7 +43,10 @@ class DAN(nn.Module):
             lenList.append(self.getLengthSample(sample))
         lenList = np.array(lenList)
         lenList.shape = (len(text),1)
-        lenList = torch.from_numpy(lenList).float().cuda()
+        if self.device == "cuda":
+            lenList = torch.from_numpy(lenList).float().cuda()
+        else:
+            lenList = torch.from_numpy(lenList).float()
 
         # Sum over all vectors in text, take average
         encoded = text_embed.sum(dim=1)

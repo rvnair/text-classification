@@ -11,7 +11,8 @@ import model
 
 DATA_PATH = "data/data.csv"
 VALID_PATH = "data/valid.csv"
-MODEL_SAV = "dan.th"
+TEST_PATH = "data/test.csv"
+MODEL_SAV = "models/dan.th"
 
 def train(epoch, device):
     mdl.train()
@@ -38,7 +39,7 @@ def train(epoch, device):
     print('* (Train) Epoch: {} | Loss: {:.4f}'.format(epoch, trainLoss))
     return trainLoss
 
-def validate(device):
+def test_model(device):
     check = torch.load(MODEL_SAV)
     mdl = model.DAN(n_classes = 2, vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
         n_hidden_units = args.embedding_dim)
@@ -47,7 +48,7 @@ def validate(device):
     mdl.eval()
     labelSet = []
     outputSet = []
-    for i,sampleSet in enumerate(dl_val):
+    for i,sampleSet in enumerate(dl_tst):
         batch = sampleSet[0]
         labels = sampleSet[1]
         labelSet.append(labels.cpu().numpy()[0])
@@ -67,14 +68,16 @@ if __name__ == "__main__":
     parser.add_argument('--embedding-dim', type=int, default=300)
     parser.add_argument('--interval', type=int, default=10)
     parser.add_argument('--cuda', type=bool, default=torch.cuda.is_available())
+    parser.add_argument('--clip', type=int, default=5)
     args = parser.parse_args()
 
-    dl_trn, vocab = dataset.load(batchSize = args.batch_size, seqLen = args.seq_len, path = DATA_PATH, cl = 5, voc=None)
-    dl_val, val_vocab = dataset.load(batchSize = 1, seqLen = args.seq_len, path = VALID_PATH, voc = vocab, cl=5)
+    dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None)
+    dl_val, val_vocab, vlenc, vldec = dataset.load(batchSize = 1, seqLen = args.seq_len, path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
+    dl_tst, tst_vocab, tlenc, tdec = dataset.load(batchSize = 1, seqLen = args.seq_len, path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
     mdl = model.DAN(n_classes = 2, vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
-        n_hidden_units = args.embedding_dim).to(device)
+        n_hidden_units = args.embedding_dim, device=device).to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
 
@@ -86,4 +89,4 @@ if __name__ == "__main__":
             print('* Saved')
             torch.save(mdl.state_dict(), MODEL_SAV)
     
-    validate(device)
+    # validate(device)

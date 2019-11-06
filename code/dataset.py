@@ -14,7 +14,6 @@ class Vocab:
         self.encoding = {w:i for i,w in enumerate(self.words, 2)}
         self.decoding = {i:w for w,i in enumerate(self.words, 2)}
 
-
     def build_words(self, corpus, clip = 1):
         vocab = collections.Counter()
         
@@ -34,10 +33,12 @@ class Vocab:
 # Needs to support indexing into samples for Dataset
 # Loads and provides index for a given sample
 class Corpus(Dataset):
-    def __init__(self, seqLen = 50, path = "", clip=5, vocab=None):
+    def __init__(self, seqLen = 50, path = "", clip=5, vocab=None, labelEnc = None, labelDec = None):
         self.seqLen = seqLen
         self.samples,self.labels = self.loadCSV(path)
-        self.labelEnc, self.labelDec = self.genLabelMap(self.labels)
+        self.labelEnc, self.labelDec = self.genLabelMap(self.labels) 
+        if not labelEnc is None and not labelDec is None:
+            self.labelEnc, self.labelDec = labelEnc,labelDec
         print(self.labelEnc)
         self.vocab =  Vocab(self.samples, clip) if vocab is None else vocab
 
@@ -57,8 +58,8 @@ class Corpus(Dataset):
     
     def genLabelMap(self, labels):
         labelSet = set(labels)
-        enc = {'positive':1, 'negative':0}#{l:i for i,l in enumerate(labelSet)}
-        dec = {1:'positive', 0:'negative'}#{i:l for i,l in enumerate(labelSet)}
+        enc = {l:i for i,l in enumerate(labelSet)}
+        dec = {i:l for i,l in enumerate(labelSet)}
         return enc,dec
 
     def pad(self, sample):
@@ -78,7 +79,8 @@ class Corpus(Dataset):
     
     def __getitem__(self, i):
         return torch.from_numpy(self.pad(self.encode(self.samples[i]))), self.labelEnc[self.labels[i]]
+
 # Returns a data loader as well as a vocabulary
-def load(batchSize, seqLen, path, cl, voc):
-    dataset = Corpus(seqLen, path, clip = cl, vocab = voc)
-    return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab)
+def load(batchSize, seqLen, path, cl, voc, lenc, ldec):
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+    return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)
