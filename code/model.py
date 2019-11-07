@@ -63,7 +63,8 @@ class DAN(nn.Module):
         return logits
 
 class CNN(nn.Module):
-    def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300, n_filters = 100, filter_sizes = [3,4,5], dropout = .5):
+    def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300, n_filters = 100, filter_sizes = [3,4,5],\
+		 dropout = .5, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
         super().__init__()
         self.n_classes = n_classes
         self.vocab_size = vocab_size

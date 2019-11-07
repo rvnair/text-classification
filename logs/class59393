@@ -1,0 +1,11 @@
+Resetting modules to system default. Reseting $MODULEPATH back to system default. All extra directories will be removed from $MODULEPATH.
+
+Lmod is automatically replacing "python2/2.7.16" with "python3/3.7.0".
+
+{'negative': 0, 'positive': 1}
+{'negative': 0, 'positive': 1}
+{'negative': 0, 'positive': 1}
+Traceback (most recent call last):
+  File "code/train.py", line 107, in <module>
+    n_hidden_units = args.embedding_dim, device=device).to(device)
+TypeError: __init__() got an unexpected keyword argument 'device'
