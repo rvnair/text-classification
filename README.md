@@ -1,0 +1,1 @@
+A set of sentiment analysis models to run text classification on the IMDB dataset. Included is a DAN and a CNN. Queue jobs to TACC with sbatch script, or use python code/train.py. 
