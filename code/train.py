@@ -72,7 +72,6 @@ def test_model(device):
         labels = sampleSet[1]
         labelSet.append(labels.cpu().numpy()[0])
         batch, labels = batch.to(device), labels.to(device)
-	#with torch.no_grad():
         output = mdl(batch)
         outputSet.append(torch.argmax(output, dim=1).detach().cpu().numpy()[0])
         if args.interval > 0 and i % (args.interval * args.batch_size) == 0 and not args.silent:

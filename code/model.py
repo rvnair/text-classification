@@ -9,7 +9,7 @@ import json
 import time
 
 class DAN(nn.Module):
-    def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300, device=torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")):
+    def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
         super().__init__()
         self.n_classes = n_classes
         self.vocab_size = vocab_size
