@@ -45,9 +45,15 @@ class DAN(nn.Module):
         lenList.shape = (len(text),1)
         if self.device == "cuda":
             lenList = torch.from_numpy(lenList).float().cuda()
-        else:
-            lenList = torch.from_numpy(lenList).float()
+            # Sum over all vectors in text, take average
+            encoded = text_embed.sum(dim=1)
+            encoded /= lenList
 
+            # Pass into 2 hidden linear layers, and take softmax
+            logits = self.classifier(encoded)
+            return logits
+            
+        lenList = torch.from_numpy(lenList).float()
         # Sum over all vectors in text, take average
         encoded = text_embed.sum(dim=1)
         encoded /= lenList
