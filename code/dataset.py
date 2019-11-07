@@ -39,7 +39,6 @@ class Corpus(Dataset):
         self.labelEnc, self.labelDec = self.genLabelMap(self.labels) 
         if not labelEnc is None and not labelDec is None:
             self.labelEnc, self.labelDec = labelEnc,labelDec
-        print(self.labelEnc)
         self.vocab =  Vocab(self.samples, clip) if vocab is None else vocab
 
     def loadCSV(self, path):
