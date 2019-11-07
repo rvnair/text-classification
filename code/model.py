@@ -43,10 +43,10 @@ class DAN(nn.Module):
             lenList.append(self.getLengthSample(sample))
         lenList = np.array(lenList)
         lenList.shape = (len(text),1)
-        if self.device == "cuda":
+        if str(self.device) == "cuda":
             lenList = torch.from_numpy(lenList).float().cuda()
             # Sum over all vectors in text, take average
-            encoded = text_embed.sum(dim=1)
+            encoded = text_embed.sum(dim=1).cuda()
             encoded /= lenList
 
             # Pass into 2 hidden linear layers, and take softmax
