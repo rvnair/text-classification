@@ -16,7 +16,7 @@ from transformers.modeling_bert import BertForPreTraining, BertPreTrainedModel, 
 DATA_PATH = "data/data.csv"
 VALID_PATH = "data/valid.csv"
 TEST_PATH = "data/test.csv"
-MODEL_SAV = "models/dan.th"
+MODEL_SAV = "models/bert.th"
 
 def train(epoch, device):
     mdl.train()
@@ -29,11 +29,9 @@ def train(epoch, device):
 
         output = mdl(input_ids=batch, labels=labels)
         loss = output[0]
-        # loss = criterion(output, labels)
         trainLoss += loss.item()
         loss.backward()
         optimizer.step()
-        
         if args.interval > 0 and i % args.interval == 0 and not args.silent:
             print('Epoch: {} | Batch: {}/{} ({:.0f}%) | Loss: {:.6f}'.format(
                 epoch, args.batch_size*i, len(dl_trn.dataset),
@@ -51,9 +49,8 @@ def validate_model(device, epoch):
         batch = sampleSet[0]
         labels = sampleSet[1]
         batch, labels = batch.to(device), labels.to(device)
-
-        output = mdl(batch)
-        loss = criterion(output, labels)
+        output = mdl(input_ids = batch, labels = labels)
+        loss = output[0]
         validLoss += loss.item()
         
         if args.interval > 0 and i % args.interval == 0 and not args.silent:
@@ -77,8 +74,8 @@ def test_model(device):
         labels = sampleSet[1]
         labelSet.append(labels.cpu().numpy()[0])
         batch, labels = batch.to(device), labels.to(device)
-        output = mdl(batch)
-        outputSet.append(torch.argmax(output, dim=1).detach().cpu().numpy()[0])
+        output = mdl(input_ids = batch, labels = labels)
+        outputSet.append(torch.argmax(output[1], dim=1).detach().cpu().numpy()[0])
         if args.interval > 0 and i % (args.interval * args.batch_size) == 0 and not args.silent:
             print('(Test) Sample: {}/{} ({:.0f}%) '.format(
                 i, len(dl_tst.dataset),
@@ -110,10 +107,10 @@ if __name__ == "__main__":
         path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, tok=tokenizer)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    mdl = bertmodels.BertBinClf.from_pretrained('bert-base-uncased')
+    mdl = bertmodels.BertBinClf.from_pretrained('bert-base-uncased').to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
-
+    
     best_loss = np.inf
     for epoch in range(1, args.epochs + 1):
         loss = train(epoch, device)
