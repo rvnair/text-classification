@@ -3,6 +3,7 @@ import csv
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
+from transformers.tokenization_bert import BertTokenizer, WordpieceTokenizer
 
 class Vocab:
     # Corpus is a list of samples (list of lists)
@@ -12,7 +13,7 @@ class Vocab:
         # Word mapped to uuid
         # Reserve padding mapped to 0
         self.encoding = {w:i for i,w in enumerate(self.words, 2)}
-        self.decoding = {i:w for w,i in enumerate(self.words, 2)}
+        self.decoding = {i:w for i,w in enumerate(self.words, 2)}
 
     def build_words(self, corpus, clip = 1):
         vocab = collections.Counter()
@@ -71,7 +72,7 @@ class Corpus(Dataset):
     
     def decode(self, sample):
         dec = self.vocab.decoding
-        return [dec.get(w,1) for w in sample]
+        return [dec.get(w,"<UNK>") for w in sample]
     
     def __len__(self):
         return len(self.samples)
@@ -79,7 +80,20 @@ class Corpus(Dataset):
     def __getitem__(self, i):
         return torch.from_numpy(self.pad(self.encode(self.samples[i]))), self.labelEnc[self.labels[i]]
 
+class BertCorpus(Corpus):
+    def __init__(self, seqLen = 50, path = "", clip=5, vocab=None, labelEnc = None, labelDec = None, tokenizer=None):
+        super(BertCorpus, self).__init__(seqLen, path, clip, vocab, labelEnc, labelDec)
+        self.tokenizer = tokenizer if tokenizer != None else BertTokenizer.from_pretrained('bert-base-uncased')
+    
+    def __getitem__(self, i):
+        text = self.decode(self.pad(self.encode(self.samples[i])))
+        return torch.tensor(self.tokenizer.encode(text)), torch.tensor([self.labelEnc[self.labels[i]]])
+
 # Returns a data loader as well as a vocabulary
 def load(batchSize, seqLen, path, cl, voc, lenc, ldec):
     dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+    return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)
+
+def load_bert(batchSize, seqLen, path, cl, voc, lenc, ldec, tok):
+    dataset = BertCorpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec, tokenizer=tok)
     return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)
