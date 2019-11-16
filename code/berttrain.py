@@ -27,8 +27,8 @@ def train(epoch, device):
         batch, labels = batch.to(device), labels.to(device)
         optimizer.zero_grad()
 
-        output = mdl(input_ids=batch, labels=labels)
-        loss = output[0]
+        output = mdl(input_ids=batch, attention_mask=(batch != 0))
+        loss = criterion(output, labels)
         trainLoss += loss.item()
         loss.backward()
         optimizer.step()
@@ -49,8 +49,8 @@ def validate_model(device, epoch):
         batch = sampleSet[0]
         labels = sampleSet[1]
         batch, labels = batch.to(device), labels.to(device)
-        output = mdl(input_ids = batch, labels = labels)
-        loss = output[0]
+        output = mdl(input_ids = batch)
+        loss = criterion(output, labels)
         validLoss += loss.item()
         
         if args.interval > 0 and i % args.interval == 0 and not args.silent:
@@ -74,8 +74,8 @@ def test_model(device):
         labels = sampleSet[1]
         labelSet.append(labels.cpu().numpy()[0])
         batch, labels = batch.to(device), labels.to(device)
-        output = mdl(input_ids = batch, labels = labels)
-        outputSet.append(torch.argmax(output[1], dim=1).detach().cpu().numpy()[0])
+        output = mdl(input_ids = batch)
+        outputSet.append(torch.argmax(output, dim=1).detach().cpu().numpy()[0])
         if args.interval > 0 and i % (args.interval * args.batch_size) == 0 and not args.silent:
             print('(Test) Sample: {}/{} ({:.0f}%) '.format(
                 i, len(dl_tst.dataset),

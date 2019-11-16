@@ -86,8 +86,9 @@ class BertCorpus(Corpus):
         self.tokenizer = tokenizer if tokenizer != None else BertTokenizer.from_pretrained('bert-base-uncased')
     
     def __getitem__(self, i):
-        text = self.decode(self.pad(self.encode(self.samples[i])))
-        return torch.tensor(self.tokenizer.encode(text)), torch.tensor([self.labelEnc[self.labels[i]]])
+        toks = self.tokenizer.tokenize(' '.join(self.samples[i]))[:48]
+        sample = self.pad(self.tokenizer.encode(toks, add_special_tokens=True)) # self.decode(self.pad(self.encode(self.samples[i])))
+        return torch.tensor(sample), self.labelEnc[self.labels[i]]
 
 # Returns a data loader as well as a vocabulary
 def load(batchSize, seqLen, path, cl, voc, lenc, ldec):
