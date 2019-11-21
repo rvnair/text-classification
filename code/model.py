@@ -140,7 +140,5 @@ class BertMLP(nn.Module):
             attention_mask=attention_mask,
         )
         cls_rep = rep[:, 0, :]  # [B, T, H]
-        print(cls_rep.shape)
-        print(cls_rep)
         logits = self.fc(cls_rep)
         return logits
