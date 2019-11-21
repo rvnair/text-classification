@@ -114,7 +114,7 @@ if __name__ == "__main__":
     modeldict = {
         "bert": model.BertMLP(n_classes = len(lenc)),
         "cnn": model.CNN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
-            n_hidden_units = args.embedding_dim, device=device),
+            n_hidden_units = args.embedding_dim, n_filters = 100, filter_sizes = [3,4,5], device=device),
         "dan": model.DAN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
             n_hidden_units = args.embedding_dim, device=device)
     }

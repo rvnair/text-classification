@@ -127,7 +127,6 @@ class CNN(nn.Module):
 class BertMLP(nn.Module):
     def __init__(self, n_classes, args=None):
         super().__init__()
-
         self.bert = BertModel.from_pretrained(
             'bert-base-uncased',
         )
@@ -141,5 +140,7 @@ class BertMLP(nn.Module):
             attention_mask=attention_mask,
         )
         cls_rep = rep[:, 0, :]  # [B, T, H]
+        print(cls_rep.shape)
+        print(cls_rep)
         logits = self.fc(cls_rep)
         return logits
