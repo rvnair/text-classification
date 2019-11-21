@@ -87,14 +87,22 @@ class BertCorpus(Corpus):
     
     def __getitem__(self, i):
         toks = self.tokenizer.tokenize(' '.join(self.samples[i]))[:48]
-        sample = self.pad(self.tokenizer.encode(toks, add_special_tokens=True)) # self.decode(self.pad(self.encode(self.samples[i])))
+        sample = self.pad(self.tokenizer.encode(toks, add_special_tokens=True)) 
+        print(sample)
+        print(self.samples[i])
         return torch.tensor(sample), self.labelEnc[self.labels[i]]
 
 # Returns a data loader as well as a vocabulary
-def load(batchSize, seqLen, path, cl, voc, lenc, ldec):
-    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
-    return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)
+def load(batchSize, seqLen, path, cl, voc, lenc, ldec, bertToks):
+    if bertToks:
+        print("using bert tokens")
+        return load_bert(batchSize, seqLen, path, cl, voc, lenc, ldec)
+    else:
+        print("using default embeddings")
+        dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+        return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)
 
-def load_bert(batchSize, seqLen, path, cl, voc, lenc, ldec, tok):
+def load_bert(batchSize, seqLen, path, cl, voc, lenc, ldec):
+    tok = tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     dataset = BertCorpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec, tokenizer=tok)
     return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)

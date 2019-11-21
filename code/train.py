@@ -98,16 +98,15 @@ if __name__ == "__main__":
     parser.add_argument('--cuda', type=bool, default=torch.cuda.is_available())
     parser.add_argument('--clip', type=int, default=5)
     parser.add_argument('--silent', type=bool, default=False)
+    parser.add_argument('--bert-tokens', type=bool, default=False)
     args = parser.parse_args()
-
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     
-    dl_trn, vocab, lenc, ldec = dataset.load_bert(batchSize=args.batch_size, seqLen=args.seq_len, \
-        path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, tok=tokenizer)
-    dl_val, val_vocab, vlenc, vldec = dataset.load_bert(batchSize =args.batch_size, seqLen = args.seq_len, \
-        path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, tok=tokenizer)
-    dl_tst, tst_vocab, tlenc, tdec = dataset.load_bert(batchSize = 1, seqLen = args.seq_len, \
-        path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, tok=tokenizer)
+    dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
+        path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+    dl_val, val_vocab, vlenc, vldec = dataset.load(batchSize =args.batch_size, seqLen = args.seq_len, \
+        path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, bertToks=args.bert_tokens)
+    dl_tst, tst_vocab, tlenc, tdec = dataset.load(batchSize = 1, seqLen = args.seq_len, \
+        path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, bertToks=args.bert_tokens)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
     mdl = model.BertMLP(None).to(device) #(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
