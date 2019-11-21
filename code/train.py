@@ -6,6 +6,11 @@ import argparse
 import numpy as np
 from sklearn.metrics import accuracy_score
 
+import bertmodels as bertmodels
+
+from transformers.tokenization_bert import BertTokenizer, WordpieceTokenizer
+from transformers.modeling_bert import BertForPreTraining, BertPreTrainedModel, BertModel, BertConfig, BertForMaskedLM, BertForSequenceClassification
+
 import dataset
 import model
 
@@ -95,16 +100,18 @@ if __name__ == "__main__":
     parser.add_argument('--silent', type=bool, default=False)
     args = parser.parse_args()
 
-    dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
-        path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None)
-    dl_val, val_vocab, vlenc, vldec = dataset.load(batchSize =args.batch_size, seqLen = args.seq_len, \
-        path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
-    dl_tst, tst_vocab, tlenc, tdec = dataset.load(batchSize = 1, seqLen = args.seq_len, \
-        path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec)
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    
+    dl_trn, vocab, lenc, ldec = dataset.load_bert(batchSize=args.batch_size, seqLen=args.seq_len, \
+        path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, tok=tokenizer)
+    dl_val, val_vocab, vlenc, vldec = dataset.load_bert(batchSize =args.batch_size, seqLen = args.seq_len, \
+        path = VALID_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, tok=tokenizer)
+    dl_tst, tst_vocab, tlenc, tdec = dataset.load_bert(batchSize = 1, seqLen = args.seq_len, \
+        path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, tok=tokenizer)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    mdl = model.DAN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
-        n_hidden_units = args.embedding_dim, device=device).to(device)
+    mdl = model.BertMLP(None).to(device) #(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+        #n_hidden_units = args.embedding_dim, device=device).to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
 

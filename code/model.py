@@ -7,6 +7,7 @@ from torch.utils.data import Dataset
 from torch.nn.utils import clip_grad_norm_
 import json
 import time
+from transformers import BertModel
 
 class DAN(nn.Module):
     def __init__(self, n_classes, vocab_size, emb_dim = 300, n_hidden_units = 300, device=torch.device("cuda" if torch.cuda.is_available() else "cpu")):
@@ -122,3 +123,23 @@ class CNN(nn.Module):
         #cat = [batch size, n_filters * len(filter_sizes)]
             
         return self.fc(cat)
+
+class BertMLP(nn.Module):
+    def __init__(self, args):
+        super().__init__()
+
+        self.bert = BertModel.from_pretrained(
+            'bert-base-uncased',
+        )
+        self.fc = nn.Linear(768, 2)
+
+    def forward(self, x):
+        # input: [B, T]
+        attention_mask = (x != 0).float()
+        rep, _, = self.bert(
+            x,
+            attention_mask=attention_mask,
+        )
+        cls_rep = rep[:, 0, :]  # [B, T, H]
+        logits = self.fc(cls_rep)
+        return logits

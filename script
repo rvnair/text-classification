@@ -14,4 +14,4 @@
 module reset
 module load python3
 source venv/bin/activate
-python3 code/berttrain.py 
+python3 code/train.py 
