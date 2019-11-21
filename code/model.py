@@ -125,7 +125,7 @@ class CNN(nn.Module):
         return self.fc(cat)
 
 class BertMLP(nn.Module):
-    def __init__(self, args, n_classes):
+    def __init__(self, n_classes, args=None):
         super().__init__()
 
         self.bert = BertModel.from_pretrained(

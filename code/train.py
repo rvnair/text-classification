@@ -99,6 +99,7 @@ if __name__ == "__main__":
     parser.add_argument('--clip', type=int, default=5)
     parser.add_argument('--silent', type=bool, default=False)
     parser.add_argument('--bert-tokens', type=bool, default=False)
+    parser.add_argument('--model', type=str, default="")
     args = parser.parse_args()
     
     dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
@@ -109,8 +110,16 @@ if __name__ == "__main__":
         path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, bertToks=args.bert_tokens)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    mdl = model.BertMLP(None, n_classes=len(lenc)).to(device) #(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
-        #n_hidden_units = args.embedding_dim, device=device).to(device)
+
+    modeldict = {
+        "bert": model.BertMLP(n_classes = len(lenc)),
+        "cnn": model.CNN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+            n_hidden_units = args.embedding_dim, device=device),
+        "dan": model.DAN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+            n_hidden_units = args.embedding_dim, device=device)
+    }
+    mdl = modeldict[args.model].to(device)
+    
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
 
