@@ -6,11 +6,6 @@ import argparse
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-import bertmodels as bertmodels
-
-from transformers.tokenization_bert import BertTokenizer, WordpieceTokenizer
-from transformers.modeling_bert import BertForPreTraining, BertPreTrainedModel, BertModel, BertConfig, BertForMaskedLM, BertForSequenceClassification
-
 import dataset
 import model
 
