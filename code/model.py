@@ -125,13 +125,13 @@ class CNN(nn.Module):
         return self.fc(cat)
 
 class BertMLP(nn.Module):
-    def __init__(self, args, num_classes):
+    def __init__(self, args, n_classes):
         super().__init__()
 
         self.bert = BertModel.from_pretrained(
             'bert-base-uncased',
         )
-        self.fc = nn.Linear(768, num_classes)
+        self.fc = nn.Linear(768, n_classes)
 
     def forward(self, x):
         # input: [B, T]

@@ -83,13 +83,11 @@ class Corpus(Dataset):
 class BertCorpus(Corpus):
     def __init__(self, seqLen = 50, path = "", clip=5, vocab=None, labelEnc = None, labelDec = None, tokenizer=None):
         super(BertCorpus, self).__init__(seqLen, path, clip, vocab, labelEnc, labelDec)
-        self.tokenizer = tokenizer if tokenizer != None else BertTokenizer.from_pretrained('bert-base-uncased')
+        self.tokenizer = tokenizer
     
     def __getitem__(self, i):
         toks = self.tokenizer.tokenize(' '.join(self.samples[i]))[:48]
         sample = self.pad(self.tokenizer.encode(toks, add_special_tokens=True)) 
-        print(sample)
-        print(self.samples[i])
         return torch.tensor(sample), self.labelEnc[self.labels[i]]
 
 # Returns a data loader as well as a vocabulary

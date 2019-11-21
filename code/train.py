@@ -109,7 +109,7 @@ if __name__ == "__main__":
         path = TEST_PATH, cl=args.clip, voc=vocab, lenc=lenc, ldec=ldec, bertToks=args.bert_tokens)
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    mdl = model.BertMLP(None).to(device) #(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+    mdl = model.BertMLP(None, n_classes=len(lenc)).to(device) #(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
         #n_hidden_units = args.embedding_dim, device=device).to(device)
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
