@@ -103,7 +103,7 @@ if __name__ == "__main__":
     parser.add_argument('--valid', type=str, default="data/valid.csv")
     parser.add_argument('--test', type=str, default="data/test.csv")
     parser.add_argument('--save-mdl', type=str, default="models/mdl.th")
-    parser.add_argument('--data-name', type=str, default="imbd")
+    parser.add_argument('--data-name', type=str, default="imdb")
     args = parser.parse_args()
 
     DATA_PATH = args.train
