@@ -11,9 +11,9 @@
 # The next line is required if the user has more than one project
 #SBATCH -A compdisc      # Allocation name to charge job against
 
-# module reset
-# module load python3
-# source venv/bin/activate
+module reset
+module load python3
+source venv/bin/activate
 
 for i in {1..3}
 do
