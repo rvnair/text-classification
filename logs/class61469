@@ -1,0 +1,125 @@
+Resetting modules to system default. Reseting $MODULEPATH back to system default. All extra directories will be removed from $MODULEPATH.
+
+Lmod is automatically replacing "python2/2.7.16" with "python3/3.7.0".
+
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_0_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_10_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_20_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_30_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_40_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_50_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_60_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_70_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_80_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_90_train.csv'
+using default embeddings
+Traceback (most recent call last):
+  File "code/train.py", line 116, in <module>
+    path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 103, in load
+    dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 42, in __init__
+    self.samples,self.labels = self.loadCSV(path)
+  File "/home1/06919/rvnair/research/text-classification/code/dataset.py", line 51, in loadCSV
+    with open(path) as csv_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'data/twitter_100_train.csv'
