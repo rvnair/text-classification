@@ -1,0 +1,11 @@
+Resetting modules to system default. Reseting $MODULEPATH back to system default. All extra directories will be removed from $MODULEPATH.
+
+Lmod is automatically replacing "python2/2.7.16" with "python3/3.7.0".
+
+using bert tokens
+using bert tokens
+using bert tokens
+Traceback (most recent call last):
+  File "code/train.py", line 126, in <module>
+    "cnn": model.CNN(n_classes = len(lenc), vocab_size = len(vocab), emb_dim = args.embedding_dim, \
+AttributeError: 'BertTokenizer' object has no attribute 'size'
