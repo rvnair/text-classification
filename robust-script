@@ -14,14 +14,14 @@
 module reset
 module load python3
 source venv/bin/activate
-python3 code/train.py --model=cnn --data-name=twitter_0 --train=data/twitter_0_train.csv --valid=data/twitter_0_valid.csv --test=data/twitter_0_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_10 --train=data/twitter_10_train.csv --valid=data/twitter_10_valid.csv --test=data/twitter_10_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_20 --train=data/twitter_20_train.csv --valid=data/twitter_20_valid.csv --test=data/twitter_20_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_30 --train=data/twitter_30_train.csv --valid=data/twitter_30_valid.csv --test=data/twitter_30_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_40 --train=data/twitter_40_train.csv --valid=data/twitter_40_valid.csv --test=data/twitter_40_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_50 --train=data/twitter_50_train.csv --valid=data/twitter_50_valid.csv --test=data/twitter_50_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_60 --train=data/twitter_60_train.csv --valid=data/twitter_60_valid.csv --test=data/twitter_60_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_70 --train=data/twitter_70_train.csv --valid=data/twitter_70_valid.csv --test=data/twitter_70_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_80 --train=data/twitter_80_train.csv --valid=data/twitter_80_valid.csv --test=data/twitter_80_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_90 --train=data/twitter_90_train.csv --valid=data/twitter_90_valid.csv --test=data/twitter_90_test.csv
-python3 code/train.py --model=cnn --data-name=twitter_100 --train=data/twitter_100_train.csv --valid=data/twitter_100_valid.csv --test=data/twitter_100_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_0 --train=data/twitter_0_train.csv --valid=data/twitter_0_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_10 --train=data/twitter_10_train.csv --valid=data/twitter_10_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_20 --train=data/twitter_20_train.csv --valid=data/twitter_20_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_30 --train=data/twitter_30_train.csv --valid=data/twitter_30_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_40 --train=data/twitter_40_train.csv --valid=data/twitter_40_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_50 --train=data/twitter_50_train.csv --valid=data/twitter_50_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_60 --train=data/twitter_60_train.csv --valid=data/twitter_60_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_70 --train=data/twitter_70_train.csv --valid=data/twitter_70_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_80 --train=data/twitter_80_train.csv --valid=data/twitter_80_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_90 --train=data/twitter_90_train.csv --valid=data/twitter_90_valid.csv --test=data/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_100 --train=data/twitter_100_train.csv --valid=data/twitter_100_valid.csv --test=data/twitter_test.csv
