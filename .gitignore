@@ -3,3 +3,4 @@ __pycache__
 ./.DS_Store
 models/*.th
 .vscode
+notebooks/.ipynb_checkpoints
