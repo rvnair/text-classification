@@ -9,11 +9,6 @@ from sklearn.metrics import accuracy_score
 import dataset
 import model
 
-DATA_PATH = "data/data.csv"
-VALID_PATH = "data/valid.csv"
-TEST_PATH = "data/test.csv"
-MODEL_SAV = "models/dan.th"
-
 def train(epoch, device):
     mdl.train()
     trainLoss = 0
@@ -95,7 +90,16 @@ if __name__ == "__main__":
     parser.add_argument('--silent', type=bool, default=False)
     parser.add_argument('--bert-tokens', type=bool, default=False)
     parser.add_argument('--model', type=str, default="")
+    parser.add_argument('--train', type=str, default="data/data.csv")
+    parser.add_argument('--valid', type=str, default="data/valid.csv")
+    parser.add_argument('--test', type=str, default="data/test.csv")
+    parser.add_argument('--save-mdl', type=str, default="models/dan.th")
     args = parser.parse_args()
+
+    DATA_PATH = args.train
+    VALID_PATH = args.valid
+    TEST_PATH = args.test
+    MODEL_SAV = args.save_mdl
     
     dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
         path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
