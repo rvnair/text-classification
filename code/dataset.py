@@ -29,6 +29,9 @@ class Vocab:
 
     def size(self):
         return len(self.words) + 2
+    
+    def __len__(self):
+        return len(self.words) + 2
 
 # Class on a list of samples
 # Needs to support indexing into samples for Dataset
@@ -94,7 +97,7 @@ class BertCorpus(Corpus):
 def load(batchSize, seqLen, path, cl, voc, lenc, ldec, bertToks):
     if bertToks:
         print("using bert tokens")
-        return load_bert(batchSize, seqLen, path, cl, voc, lenc, ldec)
+        return load_bert(batchSize, seqLen, path, cl, None, lenc, ldec)
     else:
         print("using default embeddings")
         dataset = Corpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec)
@@ -103,4 +106,4 @@ def load(batchSize, seqLen, path, cl, voc, lenc, ldec, bertToks):
 def load_bert(batchSize, seqLen, path, cl, voc, lenc, ldec):
     tok = tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     dataset = BertCorpus(seqLen, path, clip = cl, vocab = voc, labelEnc = lenc, labelDec = ldec, tokenizer=tok)
-    return (DataLoader(dataset, batchSize, shuffle = True), dataset.vocab, dataset.labelEnc, dataset.labelDec)
+    return (DataLoader(dataset, batchSize, shuffle = True), tok, dataset.labelEnc, dataset.labelDec)

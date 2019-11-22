@@ -102,7 +102,7 @@ if __name__ == "__main__":
     parser.add_argument('--train', type=str, default="data/data.csv")
     parser.add_argument('--valid', type=str, default="data/valid.csv")
     parser.add_argument('--test', type=str, default="data/test.csv")
-    parser.add_argument('--save-mdl', type=str, default="models/dan.th")
+    parser.add_argument('--save-mdl', type=str, default="models/mdl.th")
     parser.add_argument('--data-name', type=str, default="imbd")
     args = parser.parse_args()
 
@@ -123,9 +123,9 @@ if __name__ == "__main__":
 
     modeldict = {
         "bert": model.BertMLP(n_classes = len(lenc)),
-        "cnn": model.CNN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+        "cnn": model.CNN(n_classes = len(lenc), vocab_size = len(vocab), emb_dim = args.embedding_dim, \
             n_hidden_units = args.embedding_dim, n_filters = 100, filter_sizes = [3,4,5], device=device),
-        "dan": model.DAN(n_classes = len(lenc), vocab_size = vocab.size(), emb_dim = args.embedding_dim, \
+        "dan": model.DAN(n_classes = len(lenc), vocab_size = len(vocab), emb_dim = args.embedding_dim, \
             n_hidden_units = args.embedding_dim, device=device)
     }
     mdl = modeldict[args.model].to(device)
