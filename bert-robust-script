@@ -11,14 +11,14 @@
 # The next line is required if the user has more than one project
 #SBATCH -A compdisc      # Allocation name to charge job against
 
-module reset
-module load python3
-source venv/bin/activate
+# module reset
+# module load python3
+# source venv/bin/activate
 
 for i in {1..3}
 do
-    for j in {1..10}
+    for j in 0 10 20 30 40 50 60 70 80 90 100
     do
-        python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_{$j}_{$i} --train=data/twitter/twitter_{$j}_train.csv --valid=data/twitter/twitter_{$j}_valid.csv --test=data/twitter/twitter_test.csv        
+        python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_${j}_${i} --train=data/twitter/twitter_${j}_train.csv --valid=data/twitter/twitter_${j}_valid.csv --test=data/twitter/twitter_test.csv        
     done
 done
