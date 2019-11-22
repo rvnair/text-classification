@@ -1,10 +1,12 @@
 from torch.utils.data import Dataset, DataLoader
 import os
+import json
 import torch
 import pandas as pd
 import argparse
 import numpy as np
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
 
 import dataset
 import model
@@ -12,6 +14,8 @@ import model
 def train(epoch, device):
     mdl.train()
     trainLoss = 0
+
+    loss_json = []
     for i,sampleSet in enumerate(dl_trn):
         batch = sampleSet[0]
         labels = sampleSet[1]
@@ -24,6 +28,8 @@ def train(epoch, device):
         loss.backward()
         optimizer.step()
         
+        loss_json.append({"batch {}".format(i):loss.item()})
+        
         if args.interval > 0 and i % args.interval == 0 and not args.silent:
             print('Epoch: {} | Batch: {}/{} ({:.0f}%) | Loss: {:.6f}'.format(
                 epoch, args.batch_size*i, len(dl_trn.dataset),
@@ -32,7 +38,7 @@ def train(epoch, device):
             ))
     trainLoss /= len(dl_trn)
     print('* (Train) Epoch: {} | Loss: {:.4f}'.format(epoch, trainLoss))
-    return validate_model(device, epoch)
+    return validate_model(device, epoch), loss_json
 
 def validate_model(device, epoch):
     mdl.eval()
@@ -75,7 +81,10 @@ def test_model(device):
                 100.*(i)/len(dl_tst.dataset)
             ))
     valLoss = accuracy_score(labelSet, outputSet)
+    f1 = f1_score(labelSet, outputSet)
     print('* Best Model Validation Accuracy: {}'.format(valLoss))
+    print('* Best Model f1 score: {}'.format(f1))
+    return valLoss, f1
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -94,12 +103,14 @@ if __name__ == "__main__":
     parser.add_argument('--valid', type=str, default="data/valid.csv")
     parser.add_argument('--test', type=str, default="data/test.csv")
     parser.add_argument('--save-mdl', type=str, default="models/dan.th")
+    parser.add_argument('--data-name', type=str, default="imbd")
     args = parser.parse_args()
 
     DATA_PATH = args.train
     VALID_PATH = args.valid
     TEST_PATH = args.test
     MODEL_SAV = args.save_mdl
+    TRAIN_LOG_SAV = "logs/" + args.data_name + ".json"
     
     dl_trn, vocab, lenc, ldec = dataset.load(batchSize=args.batch_size, seqLen=args.seq_len, \
         path=DATA_PATH, cl=args.clip, voc=None, lenc=None, ldec=None, bertToks=args.bert_tokens)
@@ -122,12 +133,18 @@ if __name__ == "__main__":
     criterion = torch.nn.CrossEntropyLoss().to(device)
     optimizer = torch.optim.Adam(mdl.parameters(), lr=args.lr)
 
+    json_obj = {"name":args.data_name}
     best_loss = np.inf
     for epoch in range(1, args.epochs + 1):
-        loss = train(epoch, device)
+        loss, json_loss = train(epoch, device)
+        json_obj["epoch {}".format(epoch)] = json_loss
         if loss < best_loss:
             best_loss = loss
             print('* Saved')
             torch.save(mdl.state_dict(), MODEL_SAV)
     
-    test_model(device)
+    accuracy, f1 = test_model(device)
+    json_obj["accuracy"] = accuracy 
+    json_obj["macro_f1"] = f1
+    with open(TRAIN_LOG_SAV, "w") as write_file:
+        json.dump(json_obj, write_file)
