@@ -14,4 +14,4 @@
 module reset
 module load python3
 source venv/bin/activate
-python3 code/train.py --model=cnn
+python3 code/train.py --model=bert --bert-tokens=True --data-name=bert --lr=2e-5 --batch-size=16

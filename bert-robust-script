@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH -J class     # Job name
+#SBATCH -o logs/class%j # Name of stdout output file(%j expands to jobId)
+#SBATCH -e logs/class%j # Name of stderr output file(%j expands to jobId)
+#SBATCH -p gtx          # Submit to the 'normal' or 'development' queue
+#SBATCH -N 1                    # Total number of nodes requested (16 cores/node)
+#SBATCH -n 1                    # Total number of mpi tasks requested
+#SBATCH -t 24:00:00             # Max run time (hh:mm:ss) - 72 hours; this is determined by the queue you submit to, in this case gpu-long; please refer to the user guide for queue info.
+#SBATCH --mail-user=rohan.nair@utexas.edu
+#SBATCH --mail-type=ALL
+# The next line is required if the user has more than one project
+#SBATCH -A compdisc      # Allocation name to charge job against
+
+module reset
+module load python3
+source venv/bin/activate
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_0 --train=data/twitter/twitter_0_train.csv --valid=data/twitter/twitter_0_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_10 --train=data/twitter/twitter_10_train.csv --valid=data/twitter/twitter_10_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_20 --train=data/twitter/twitter_20_train.csv --valid=data/twitter/twitter_20_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_30 --train=data/twitter/twitter_30_train.csv --valid=data/twitter/twitter_30_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_40 --train=data/twitter/twitter_40_train.csv --valid=data/twitter/twitter_40_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_50 --train=data/twitter/twitter_50_train.csv --valid=data/twitter/twitter_50_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_60 --train=data/twitter/twitter_60_train.csv --valid=data/twitter/twitter_60_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_70 --train=data/twitter/twitter_70_train.csv --valid=data/twitter/twitter_70_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_80 --train=data/twitter/twitter_80_train.csv --valid=data/twitter/twitter_80_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_90 --train=data/twitter/twitter_90_train.csv --valid=data/twitter/twitter_90_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=bert --bert-tokens=True --lr=2e-5 --batch-size=16 --data-name=twitter_bert_100 --train=data/twitter/twitter_100_train.csv --valid=data/twitter/twitter_100_valid.csv --test=data/twitter/twitter_test.csv
