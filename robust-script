@@ -14,7 +14,7 @@
 module reset
 module load python3
 source venv/bin/activate
-python3 code/train.py --model=cnn --data-name=twitter_0 --train=data/twitter/twitter_0_train.csv --valid=data /twitter/twitter/twitter_0_valid.csv --test=data/twitter/twitter_test.csv
+python3 code/train.py --model=cnn --data-name=twitter_0 --train=data/twitter/twitter_0_train.csv --valid=data/twitter/twitter_0_valid.csv --test=data/twitter/twitter_test.csv
 python3 code/train.py --model=cnn --data-name=twitter_10 --train=data/twitter/twitter_10_train.csv --valid=data/twitter/twitter_10_valid.csv --test=data/twitter/twitter_test.csv
 python3 code/train.py --model=cnn --data-name=twitter_20 --train=data/twitter/twitter_20_train.csv --valid=data/twitter/twitter_20_valid.csv --test=data/twitter/twitter_test.csv
 python3 code/train.py --model=cnn --data-name=twitter_30 --train=data/twitter/twitter_30_train.csv --valid=data/twitter/twitter_30_valid.csv --test=data/twitter/twitter_test.csv
