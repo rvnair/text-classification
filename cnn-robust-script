@@ -19,6 +19,6 @@ for i in {1..3}
 do
     for j in 0 10 20 30 40 50 60 70 80 90 100
     do
-        python3 code/train.py --model=cnn --bert-tokens=True --data-name=twitter_cnn_${j}_${i} --train=data/twitter/twitter_${j}_train.csv --valid=data/twitter/twitter_${j}_valid.csv --test=data/twitter/twitter_test.csv        
+        python3 code/train.py --model=cnn --bert-tokens=True --data-name=twitter_cnn_rand_${j}_${i} --train=data/twitter/rand/twitter_${j}_train.csv --valid=data/twitter/rand/twitter_${j}_valid.csv --test=data/twitter/twitter_test.csv        
     done
 done
